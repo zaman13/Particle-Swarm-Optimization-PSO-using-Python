@@ -5,9 +5,13 @@ The code can work with any arbitrary fitness/cost function with arbitrary number
 
 
 # Output animation
+Generated using [pso_2D_animation_v1.py](https://github.com/zaman13/Particle-Swarm-Optimization-PSO-using-Python/blob/master/Code/pso_2D_animation_v1.py) file.
+
 
 <p float="left">
-<img src="https://github.com/zaman13/Particle-Swarm-Optimization-PSO-using-Python/blob/master/pso_anim_1.gif" alt="alt text" width="400">
-<img src="https://github.com/zaman13/Particle-Swarm-Optimization-PSO-using-Python/blob/master/pso_anim_2.gif" alt="alt text" width="400">
+<img src="https://github.com/zaman13/Particle-Swarm-Optimization-PSO-using-Python/blob/master/pso_anim_1.gif" alt="alt text" width="400" align = "top">
+<img src="https://github.com/zaman13/Particle-Swarm-Optimization-PSO-using-Python/blob/master/pso_anim_2.gif" alt="alt text" width="400" align = "middle">
+<img src="https://github.com/zaman13/Particle-Swarm-Optimization-PSO-using-Python/blob/master/colorbar.png" alt="alt text" height="240" align = "middle">
+
 </p>
 
