@@ -10,19 +10,27 @@ Particle swarm optimization code
 - One function call per iteration.  
 
 Tested in python 2.7.
+
+v1_1: Added average fitness and average pbest plots for checking convergence 
 """
+
+
+
 from __future__ import print_function    
 
 import time
 import math
 import numpy as np
 import pylab as py
+py.rcParams.update({'font.size': 14})
 
 
 # Control parameters
-w = 0.5                   # Intertial weight
+w = 0.5                   # Intertial weight. In some variations, it is set to vary with iteration number.
 c1 = 2.0                  # Weight of searching based on the optima found by a particle
 c2 = 2.0                  # Weight of searching based on the optima found by the swarm
+v_fct = 1                 # Velocity adjust factor. Set to 1 for standard PSO.
+
 
 Np = 40                   # population size (number of particles)
 D = 4                     # dimension (= no. of parameters in the fitness function)
@@ -53,6 +61,9 @@ gbest = np.zeros(D)                 # gbest solution
 
 gbest_store = np.zeros((D,max_iter))   # storing gbest solution at each iteration
 
+pbest_val_avg_store = np.zeros(max_iter)
+fitness_avg_store = np.zeros(max_iter)
+
 x = np.random.rand(D,Np)            # Initial position of the particles
 v = np.zeros((D,Np))                # Initial velocity of the particles
 
@@ -62,6 +73,7 @@ for m in range(D):
     x[m,:] = xL[m] + (xU[m]-xL[m])*x[m,:]
     
 
+# Initial evaluations (for iteration = 0)
 # Function call. Evaluates the fitness of the initial swarms    
 fit = fitness(x)           # vector of size Np
 
@@ -72,7 +84,8 @@ pbest = np.copy(x)         # initial pbest solution = initial position. Matrix o
 ind = np.argmax(pbest_val)                # index where pbest_val is maximum. 
 gbest_val[0] = np.copy(pbest_val[ind])    # set initial gbest_val
 gbest = np.copy(pbest[:,ind])
-
+pbest_val_avg_store[0] = np.mean(pbest_val)
+fitness_avg_store[0] = np.mean(fit)
 
 print("Iter. =", 0, ". gbest_val = ", gbest_val[0])
 print("gbest_val = ",gbest_val[0])
@@ -87,9 +100,9 @@ for iter in range(1,max_iter):
     v_global = np.multiply(((x.transpose()-gbest).transpose()),r2)*c2*(-1.0)    # velocity towards global optima
     v_local = np.multiply((pbest- x),r1)*c1           # velocity towards local optima (pbest)
 
-    v = w*v + v_local + v_global        # velocity update
+    v = w*v + (v_local + v_global)      # velocity update
   
-    x = x + v                           # position update
+    x = x + v*v_fct                     # position update
     
     
     fit = fitness(x)                    # fitness function call (once per iteration). Vector Np
@@ -106,7 +119,9 @@ for iter in range(1,max_iter):
     gbest = np.copy(pbest[:,ind2])                    # global best solution, gbest
     
     gbest_store[:,iter] = np.copy(gbest)              # store gbest solution
-
+    
+    pbest_val_avg_store[iter] = np.mean(pbest_val)
+    fitness_avg_store[iter] = np.mean(fit)
     print("Iter. =", iter, ". gbest_val = ", gbest_val[iter])  # print iteration no. and best solution at each iteration
     
     
@@ -115,13 +130,23 @@ for iter in range(1,max_iter):
 # Plotting
 py.close('all')
 py.figure(1)
-py.plot(gbest_val)
+py.plot(gbest_val,label = 'gbest_val')
+py.plot(pbest_val_avg_store, label = 'Avg. pbest')
+py.plot(fitness_avg_store, label = 'Avg. fitness')
+py.legend()
+
+
 py.xlabel('iterations')
 py.ylabel('fitness, gbest_val')
+
+
 py.figure(2)
-py.plot(gbest_store[1,:],'r')
+for m in range(D):
+    py.plot(gbest_store[m,:],label = 'D = ' + str(m+1))
+    
+py.legend()
 py.xlabel('iterations')
-py.ylabel('gbest[1,iter]')
+py.ylabel('Best solution, gbest[:,iter]')
 
 
         
