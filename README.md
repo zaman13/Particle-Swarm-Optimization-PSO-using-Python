@@ -23,3 +23,11 @@ Generated using [pso_2D_animation_v1.py](https://github.com/zaman13/Particle-Swa
 
 </p>
 
+# Version Notes:
+
+v1_1:
+- Added average fitness and average pbest plots for checking convergence 
+
+v1_2:
+- The intial variable assignment has been embedded within the loop
+- Added elapsed time calculator
